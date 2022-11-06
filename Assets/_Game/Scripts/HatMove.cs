@@ -8,7 +8,12 @@ public class HatMove : MonoBehaviour
     [SerializeField] 
     private float speed;
 
- 
+    private GameController gameController;
+
+    private void Start() {
+        gameController = FindObjectOfType<GameController>();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -17,7 +22,7 @@ public class HatMove : MonoBehaviour
 
     private void DragTouch()
     {
-        if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
+        if(Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved && gameController.gameStarted)
         {
             // Guarda a posição do dedo na tela
             Vector2 touchDeltaPosition = Input.GetTouch(0).deltaPosition;

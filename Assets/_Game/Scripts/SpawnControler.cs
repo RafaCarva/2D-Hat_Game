@@ -7,6 +7,7 @@ public class SpawnControler : MonoBehaviour
     [SerializeField] private GameObject ballPrefab;
     [SerializeField] private float topDistance, lateralMargin;
     private Vector2 screenWidth;
+    private GameController gameController;
 
     private void Awake()
     {
@@ -25,6 +26,8 @@ public class SpawnControler : MonoBehaviour
         screenWidth = Camera.main.ScreenToWorldPoint(new Vector2(Screen.safeArea.width, Screen.safeArea.height));
         Vector2 heightPosition = new Vector2(transform.position.x, Camera.main.orthographicSize + topDistance);
         transform.position = heightPosition;
+
+        gameController = FindObjectOfType<GameController>();
     }
 
     private void SpawnInvoke()
@@ -35,13 +38,20 @@ public class SpawnControler : MonoBehaviour
     // Métodos IEnumerator acontecem depois de um determiando tempo.
     private IEnumerator Spawn()
     {
-        yield return new WaitForSeconds(2.0f);
+        if(gameController.gameStarted)
+        {
+          yield return new WaitForSeconds(0f);
         transform.position = new Vector2(
             Random.Range(-screenWidth.x + lateralMargin, screenWidth.x - lateralMargin),
             transform.position.y);
-
         // Instantiate ([prefab], [posição], [rotação])
-        GameObject tempBallPrefab = Instantiate(ballPrefab, transform.position, Quaternion.identity) as GameObject;
+        GameObject tempBallPrefab = Instantiate(ballPrefab, transform.position, Quaternion.identity) as GameObject;  
+        }
+        else
+        {
+            yield return null;
+        }
+        
     }
 
 }
