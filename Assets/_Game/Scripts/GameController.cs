@@ -10,32 +10,57 @@ public class GameController : MonoBehaviour
 
     public bool gameStarted;
 
+    private UIController uiController;
+
     // Start is called before the first frame update
     void Start()
     {
-        score = 0;
-        currentTime = startTime;
         gameStarted = false;
+        uiController = FindObjectOfType<UIController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        CountDownTime();
+        
     }
+
+    public void InvokeCountDownTime()
+    {
+        InvokeRepeating("CountDownTime", 1f, 1f);
+    }
+
+    public void StartGame()
+    {
+        score = 0;
+        currentTime = startTime;
+        gameStarted = true;
+        InvokeCountDownTime();
+    }
+
+    public void BackMailMenu()
+    {
+        score = 0;
+        currentTime = 0f;
+        gameStarted = false;
+        InvokeCountDownTime();  
+    }
+
 
     public void CountDownTime()
     {
         if(currentTime > 0f && gameStarted)
         {
             // Vai decrementar 1 por segundo.
-            currentTime -= Time.deltaTime;
-            // COnverte o float para int (para não exibir as casas decimais).
-            float currentTimeToInt = Mathf.RoundToInt(currentTime);
-            Debug.Log(currentTimeToInt);    
+            currentTime -= 1f;
         }
         else
         {
+            uiController.panelGameOver.gameObject.SetActive(true);
+            uiController.panelGame.gameObject.SetActive(false);
+            gameStarted = false;
+            currentTime = 0f;
+            CancelInvoke("CountdownTime");
             return;
         }
 
