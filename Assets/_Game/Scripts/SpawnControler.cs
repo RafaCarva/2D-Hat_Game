@@ -9,6 +9,8 @@ public class SpawnControler : MonoBehaviour
     private Vector2 screenWidth;
     private GameController gameController;
 
+    public Transform allBallsParent;
+
     private void Awake()
     {
         Initialize();
@@ -44,8 +46,11 @@ public class SpawnControler : MonoBehaviour
         transform.position = new Vector2(
             Random.Range(-screenWidth.x + lateralMargin, screenWidth.x - lateralMargin),
             transform.position.y);
-        // Instantiate ([prefab], [posição], [rotação])
-        GameObject tempBallPrefab = Instantiate(ballPrefab, transform.position, Quaternion.identity) as GameObject;  
+            // Instantiate ([prefab], [posição], [rotação])
+            GameObject tempBallPrefab = Instantiate(ballPrefab, transform.position, Quaternion.identity) as GameObject; 
+
+            // Tornar a bola instanciada filha do game object "All Balls" (para manter a organização).
+            tempBallPrefab.transform.parent = allBallsParent;
         }
         else
         {

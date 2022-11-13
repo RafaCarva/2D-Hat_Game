@@ -6,11 +6,13 @@ public class MyTrigger : MonoBehaviour
 {
     // Esse GameController é uma instância do meu script
     private GameController gameController;
+    private UIController uiController;
 
     private void Start() 
     {
         // Popula o gameCOntroller com o G.O da cena.
         gameController = FindObjectOfType<GameController>();
+        uiController = FindObjectOfType<UIController>();
     }
 
     private void OnTriggerEnter2D(Collider2D target) 
@@ -21,8 +23,9 @@ public class MyTrigger : MonoBehaviour
         }
         else if(target.gameObject.CompareTag("Point"))
         {
-            gameController.score += 1;
-            Debug.Log("Pontos: " + gameController.score);
+            gameController.score++;
+            uiController.txtScore.text = gameController.score.ToString();
+            Destroy(this.gameObject);
         }
     }
 }
